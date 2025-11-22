@@ -48,7 +48,7 @@ flake8 = { version = '*'}
 coverage = { version = '*'}
 black = { version = '*'}
 ruff = { version = '*'}
-bandit = "^1.8.3"
+bandit = "^1.9.1"
 Flake8-pyproject = "^1.2.3"
 pytest-httpx = "^0.35.0"
 
