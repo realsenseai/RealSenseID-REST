@@ -5,49 +5,51 @@ It is meant to be a kickstarter for projects that utilize RealSenseID with remot
 
 ## Pre-requisites
 
-- Python 3.10+ (All the way to Python 3.12)
+- Python 3.14+
+- uv (Python package and project manager)
 
 ## Installation - First Time
 
-Prepare a virtual environment:
+Install uv if you haven't already:
 
-Note: If you're on Ubuntu, and it complains about `pip` not available, run this:  
 ```shell
-sudo apt install -y python3-pip
+# On macOS and Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# On Windows
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-Standard installation:
+Or see https://docs.astral.sh/uv/getting-started/installation/ for more installation options.
 
-First time only (Linux & Windows):
+Standard installation (Linux & Windows):
 ```shell
-python3 -m pip install poetry         # Install poetry
-poetry install                        # Install requirements
+uv sync                               # Install requirements
 ```
 
-Or you can use the official poetry installer: https://python-poetry.org/docs/#installing-with-the-official-installer
-and then:
+To install with development and test dependencies:
 ```shell
-poetry install                        # Install requirements
+uv sync --extra dev --extra test     # Install all dependencies
 ```
 
 ## Update / Run
 
 Update Packages (Linux & Windows):
 ```shell
-poetry install                        # Install / Update requirements
+uv sync                               # Install / Update requirements
 ```
 
 Then everytime you need to run:
 ```shell
-poe run
+uv run poe run
 ```
 or
 ```shell
-poetry run fastapi run rsid_rest/main.py 
+uv run fastapi run rsid_rest/main.py
 ```
 or
 ```shell
-poetry run python3 -m uvicorn rsid_rest.main:app --reload
+uv run python -m uvicorn rsid_rest.main:app --reload
 ```
 
 ## Usage
@@ -104,7 +106,7 @@ Similar to General Settings, the following variables can be set in `.env` or in 
 ### Creating a Client using the OpenAPI Schema
 Running the following command will generate `openapi.json` file that can be used with the OpenAPI generator
 ```shell
-poe gen-openapi
+uv run poe gen-openapi
 ```
 Navigate to: https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#overview to find out more about
 the ability to automatically generate SDK that can use this API.
