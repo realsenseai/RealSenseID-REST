@@ -12,7 +12,7 @@ from pathlib import Path
 
 import cv2
 import numpy as np
-import rsid_py
+from . import rsid_py
 from cv2.typing import MatLike
 from fastapi.concurrency import run_in_threadpool
 from loguru import logger
@@ -68,7 +68,7 @@ class RSIDApiWrapper:
         faces: list[rsid_py.FaceRect] | None = None
         exception: Exception | None = None
 
-        def on_hint(hint: rsid_py.AuthenticateStatus | None):
+        def on_hint(hint: rsid_py.AuthenticateStatus | None, score: float | None):
             # TODO: Publish on websocket
             logger.debug(f"on_hint {hint}")
 
@@ -123,7 +123,7 @@ class RSIDApiWrapper:
         best_match_updated_faceprints: rsid_py.Faceprints | None = None
         best_match_db_record = None
 
-        def on_hint(hint: rsid_py.AuthenticateStatus | None):
+        def on_hint(hint: rsid_py.AuthenticateStatus | None, score: float | None):
             # SDK Context
             # TODO: Publish on websocket
             logger.debug(f"on_hint {hint}")
@@ -238,7 +238,7 @@ class RSIDApiWrapper:
             # TODO: Publish on websocket?
             logger.debug(f"on_progress {face_pose}")
 
-        def on_hint(hint: rsid_py.EnrollStatus | None):
+        def on_hint(hint: rsid_py.EnrollStatus | None, score: float | None):
             # TODO: Publish on websocket?
             logger.debug(f"on_hint {hint}")
 
@@ -332,7 +332,7 @@ class RSIDApiWrapper:
         def on_progress(p: rsid_py.FacePose):
             logger.info(f"on_progress {p}")
 
-        def on_hint(s: rsid_py.EnrollStatus):
+        def on_hint(s: rsid_py.EnrollStatus, score: float | None):
             logger.info(f"on_hint {s}")
 
         def on_faces(faces: list[rsid_py.FaceRect], i: int):
@@ -500,7 +500,7 @@ class RSIDApiWrapper:
                     rsid_config.algo_flow = config.algo_flow.to_rsid_py()
                     rsid_config.camera_rotation = config.camera_rotation.to_rsid_py()
                     rsid_config.security_level = config.security_level.to_rsid_py()
-                    rsid_config.face_selection_policy = config.face_selection_policy.to_rsid_py()
+                    #rsid_config.face_selection_policy = config.face_selection_policy.to_rsid_py()
                     rsid_config.matcher_confidence_level = config.matcher_confidence_level.to_rsid_py()
                     f.set_device_config(rsid_config)
                 except Exception as e:
@@ -566,6 +566,7 @@ class RSIDApiWrapper:
                 preview_cfg = rsid_py.PreviewConfig()
                 preview_cfg.camera_number = get_app_settings().preview_camera_number
                 preview_cfg.preview_mode = rsid_py.PreviewMode.MJPEG_1080P
+                preview_cfg.device_type = rsid_py.discover_device_type(get_app_settings().com_port)
                 # preview_cfg.portrait_mode = True
                 # preview_cfg.rotate_raw = False
                 self._preview = rsid_py.Preview(preview_cfg)

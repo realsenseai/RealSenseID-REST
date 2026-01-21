@@ -31,4 +31,4 @@ class StreamEncodingStypes(Enum):
 
 class BaseAppSettings(BaseSettings, validate_assignment=True):
     app_env: AppEnvTypes = AppEnvTypes.prod
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")

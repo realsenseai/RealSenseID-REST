@@ -13,9 +13,7 @@ from rsid_rest.core.settings.base import ApplicationDBTypes, HostModeAuthTypes, 
 
 
 class ProdAppSettings(AppSettings, validate_assignment=True):
-    model_config = SettingsConfigDict(env_file="prod.env")
-
-    db_mode: ApplicationDBTypes = ApplicationDBTypes.device
+    model_config = SettingsConfigDict(env_file=".env")
 
     # Device discovery and serial port configuration
     auto_detect: bool = True

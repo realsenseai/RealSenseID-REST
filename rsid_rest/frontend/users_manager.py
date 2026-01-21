@@ -18,6 +18,7 @@ class UserList:
     title: str
     on_change: Callable
     users: List[str] = field(default_factory=list)
+    enabled: bool = True
 
     def add(self, user_id: str) -> None:
         self.users.append(user_id)
@@ -165,9 +166,8 @@ class UserManager:
         logger.info(f"Enrolling user_id: {user_id}")
         self.loading_notification = ui.notification(f"🖼️ Enrolling Image for: {user_id}", spinner=True, timeout=30)
 
-        e.content.seek(0)
-        content = e.content.read()
-        files = {"EnrollImageFileUpload": (e.name, io.BytesIO(content))}
+        content = await e.file.read()
+        files = {"EnrollImageFileUpload": (e.file.name, io.BytesIO(content))}
         http_client: httpx.AsyncClient = httpx.AsyncClient()
         response: httpx.Response = await http_client.post(
             f"{self.base_url}/v1/users/enroll-image/",
@@ -202,9 +202,8 @@ class UserManager:
                 ui.label("Enroll Image").classes("font-medium")
             ui.separator()
             with ui.row().classes("items-center max-w-full"):
-                b64_bytes = base64.b64encode(e.content.read())
-                ui.image(f"data:{e.type};base64,{b64_bytes.decode()}").classes("w-40")
-            ui.separator()
+                b64_bytes = base64.b64encode(await e.file.read())
+                ui.image(f"data:{e.file.content_type};base64,{b64_bytes.decode()}").classes("w-40")
             new_user_id = ui.input(
                 placeholder="User ID",
                 # validation={'Too short': lambda value: len(value) >= 1}

@@ -22,11 +22,6 @@ targets = [
         "target_model_name": "CameraRotationEnum",
     },
     {
-        "class": "FaceSelectionPolicy",
-        "class_snake_name": "face_selection_policy",
-        "target_model_name": "FaceSelectionPolicyEnum",
-    },
-    {
         "class": "SecurityLevel",
         "class_snake_name": "security_level",
         "target_model_name": "SecurityLevelEnum",
@@ -62,7 +57,7 @@ def generate_models(gen_file_path: str):
     template = (
         """# AUTOMATICALLY GENERATED FILE - DO NOT EDIT
 # TO REGENERATE: poe gen
-# OR: poetry run poe gen
+# OR: uv run poe gen
 from enum import Enum
 
 from .. import rsid_py

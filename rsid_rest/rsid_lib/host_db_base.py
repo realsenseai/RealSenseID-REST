@@ -5,7 +5,7 @@
 from abc import abstractmethod
 from typing import Any
 
-import rsid_py
+from . import rsid_py
 
 
 class HostDBBase:
