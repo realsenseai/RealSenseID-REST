@@ -5,7 +5,7 @@ It is meant to be a kickstarter for projects that utilize RealSenseID with remot
 
 ## Pre-requisites
 
-- Python 3.14+
+- Python 3.10+
 - uv (Python package and project manager)
 
 ## Installation - First Time
