@@ -49,7 +49,6 @@ class SettingsDialog(ui.dialog):
             ui.notify("Error while retrieving settings.", color="negative")
             logger.error(f"Error while retrieving settings: {response.text}")
         self.loading_notification.dismiss()
-        # self.show_settings.refresh()
 
     async def save_settings(self):
         self.loading_notification = ui.notification("💽 Saving settings to device", spinner=True)
