@@ -17,7 +17,7 @@ class DeviceConfig:
     camera_rotation: str | None = field(default_factory=str)
     algo_flow: str | None = field(default_factory=str)
     security_level: str | None = field(default_factory=str)
-    face_selection_policy: str | None = field(default_factory=str)
+    # face_selection_policy: str | None = field(default_factory=str)
     matcher_confidence_level: str | None = field(default_factory=str)
 
 
@@ -39,14 +39,16 @@ class SettingsDialog(ui.dialog):
         if response.status_code == 200:
             self.dc.algo_flow = response.json()["config"]["algo_flow"]
             self.dc.security_level = response.json()["config"]["security_level"]
-            self.dc.face_selection_policy = response.json()["config"]["face_selection_policy"]
+            # self.dc.face_selection_policy = response.json()["config"]["face_selection_policy"]
             self.dc.camera_rotation = response.json()["config"]["camera_rotation"]
             self.dc.matcher_confidence_level = response.json()["config"]["matcher_confidence_level"]
             self.dc.on_change()
             self.enable_controls = True
             self.update()
+        else:
+            ui.notify("Error while retrieving settings.", color="negative")
+            logger.error(f"Error while retrieving settings: {response.text}")
         self.loading_notification.dismiss()
-        self.show_settings.refresh()
 
     async def save_settings(self):
         self.loading_notification = ui.notification("💽 Saving settings to device", spinner=True)
@@ -55,7 +57,7 @@ class SettingsDialog(ui.dialog):
         json = {
             "algo_flow": self.dc.algo_flow,
             "camera_rotation": self.dc.camera_rotation,
-            "face_selection_policy": self.dc.face_selection_policy,
+            #"face_selection_policy": self.dc.face_selection_policy,
             "security_level": self.dc.security_level,
             "matcher_confidence_level": self.dc.matcher_confidence_level,
         }
@@ -85,30 +87,30 @@ class SettingsDialog(ui.dialog):
 
         ui.separator()
 
-        if self.dc.face_selection_policy is None:
-            self.loading_notification = ui.notification("Loading settings...", spinner=True)
-            ui.label("Retrieving settings!").classes("mx-auto")
-            ui.label("Please wait...").classes("mx-auto")
-            ui.separator()
-            with ui.row().classes("justify-center w-80"):
-                ui.button("Close", icon="close", on_click=lambda: self.close())
-            asyncio.create_task(self.load_settings())
-            return
+        # if self.dc.face_selection_policy is None:
+        #     self.loading_notification = ui.notification("Loading settings...", spinner=True)
+        #     ui.label("Retrieving settings!").classes("mx-auto")
+        #     ui.label("Please wait...").classes("mx-auto")
+        #     ui.separator()
+        #     with ui.row().classes("justify-center w-80"):
+        #         ui.button("Close", icon="close", on_click=lambda: self.close())
+        #     asyncio.create_task(self.load_settings())
+        #     return
 
-        with ui.row().style("gap:2em").classes("place-content-center w-full"):
-            ui.label("Face Selection").classes("font-medium").style("padding: 8px 0px")
-            options = {
-                "FaceSelectionPolicy.Single": "Single",
-                "FaceSelectionPolicy.All": "Multi",
-            }
-            ui.toggle(options).bind_value(self.dc, "face_selection_policy").bind_enabled(self, "enable_controls")
+        # with ui.row().style("gap:2em").classes("place-content-center w-full"):
+        #     ui.label("Face Selection").classes("font-medium").style("padding: 8px 0px")
+        #     options = {
+        #         "FaceSelectionPolicy.Single": "Single",
+        #         "FaceSelectionPolicy.All": "Multi",
+        #     }
+        #     ui.toggle(options).bind_value(self.dc, "face_selection_policy").bind_enabled(self, "enable_controls")
 
         with ui.row().style("gap:2em").classes("place-content-center w-full"):
             ui.label("Security Level").classes("font-medium").style("padding: 8px 0px")
             options = {
                 "SecurityLevel.High": "High",
-                "SecurityLevel.Medium": "Medium",
-                "SecurityLevel.Low": "Low",
+                "SecurityLevel.Medium": "Enhanced",
+                "SecurityLevel.Low": "Standard",
             }
             ui.toggle(options).bind_value(self.dc, "security_level").bind_enabled(self, "enable_controls")
 
@@ -116,8 +118,8 @@ class SettingsDialog(ui.dialog):
             ui.label("Matcher Confidence Level").classes("font-medium").style("padding: 8px 0px")
             options = {
                 "MatcherConfidenceLevel.High": "High",
-                "MatcherConfidenceLevel.Medium": "Medium",
-                "MatcherConfidenceLevel.Low": "Low",
+                "MatcherConfidenceLevel.Medium": "Enhanced",
+                "MatcherConfidenceLevel.Low": "Standard",
             }
             ui.toggle(options).bind_value(self.dc, "matcher_confidence_level").bind_enabled(self, "enable_controls")
 

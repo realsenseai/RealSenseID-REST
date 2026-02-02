@@ -1,9 +1,10 @@
-[tool.poetry]
+[project]
 name = "realsenseid-fastapi"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
-authors = ["RealSenseID Team"]
+authors = [{ name = "RealSenseID Team" }]
 readme = "README.md"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -11,50 +12,54 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Sample",
     "Typing :: Typed",
 ]
-package-mode = false
 
+dependencies = [
+    "fastapi[all]>=0.128.0",
+    "uvicorn>=0.34.3",
+    "pydantic>=2.11.7",
+    "pydantic-settings>=2.9.1",
+    "asgi-correlation-id>=4.3.1",
+    "loguru>=0.7.3",
+    "asgi-lifespan>=2.1.0",
+    "uvloop>=0.21.0; sys_platform != 'win32'",
+    "pyserial>=3.5",
+    "numpy>=2.2.6",
+    "simplejpeg>=1.8.2",
+    "opencv-python-headless>=4.11.0.86",
+    "python-multipart>=0.0.20",
+    "nicegui>=2.20.0",
+    "qdrant-client>=1.14.3",
+    # "realsenseid==0.38.2",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-fastapi = { extras = ["all"], version = "^0.115.12" }
-uvicorn = "^0.34.3"
-pydantic = "^2.11.7"
-pydantic-settings = "^2.9.1"
-asgi-correlation-id = "^4.3.1"
-loguru = "^0.7.3"
-asgi-lifespan = "^2.1.0"
-uvloop = { version = "^0.21.0", markers = "sys_platform != 'win32'" }
-pyserial = "^3.5"
-numpy = "^2.2.6"
-simplejpeg = "^1.8.2"                   # For serving stream
-opencv-python-headless = "^4.11.0.86"    # For image conversion / image enrolment
-python-multipart = "^0.0.20"
-nicegui = "^2.20.0"
-qdrant-client = "^1.14.3"
-realsenseid = "0.38.2"
+[dependency-groups]
+test = [
+    "pytest>=8.4.0",
+    "pytest-mock",
+    "pytest-asyncio>=1.0.0",
+    "flake8",
+    "coverage",
+    "black",
+    "ruff",
+    "bandit>=1.8.3",
+    "Flake8-pyproject>=1.2.3",
+    "pytest-httpx>=0.35.0",
+]
+dev = [
+    "poethepoet>=0.35.0",
+    "pybind11-stubgen",
+]
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.uv]
+default-groups = ["test", "dev"]
 
-[tool.poetry.group.test.dependencies]
-pytest = "^8.4.2"
-pytest-mock = "*"
-pytest-asyncio = "^1.0.0"
-flake8 = { version = '*'}
-coverage = { version = '*'}
-black = { version = '*'}
-ruff = { version = '*'}
-bandit = "^1.8.3"
-Flake8-pyproject = "^1.2.3"
-pytest-httpx = "^0.35.0"
-
-[tool.poetry.group.dev.dependencies]
-poethepoet = "^0.35.0"
-pybind11-stubgen = "*"
+[tool.bandit]
+targets = ["rsid_rest"]
 
 [tool.flake8]
 exclude = ['.venv', 'venv', 'venv-win', 'venv-macos']
@@ -82,6 +87,7 @@ lint.ignore = [
     "W191", # indentation contains tabs
 ]
 line-length = 120
+target-version = "py314"
 exclude = [
     ".git",
     ".mypy_cache",
@@ -172,8 +178,11 @@ sequence = []
 help = "Generate export openapi.json file"
 script = "scripts.tasks.export_openapi:export_openapi()"
 
-
 [tool.poe.tasks.run]
 help = "Run server"
 cmd = " fastapi run rsid_rest/main.py"
 env = { "PYTHONPATH" = "rsid_rest/rsid_lib" }
+
+#[build-system]
+#requires = ["hatchling"]
+#build-backend = "hatchling.build"

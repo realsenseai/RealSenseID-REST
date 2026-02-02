@@ -5,7 +5,7 @@
 import copy
 from typing import Any, Optional
 
-import rsid_py
+from . import rsid_py
 from pydantic import (
     BaseModel,
     Field, HttpUrl,
@@ -16,7 +16,6 @@ from .gen.models import (
     AuthenticateStatusEnum,
     CameraRotationEnum,
     EnrollStatusEnum,
-    FaceSelectionPolicyEnum,
     MatcherConfidenceLevelEnum,
     SecurityLevelEnum,
     StatusEnum,
@@ -73,16 +72,6 @@ class DeviceConfig(BaseModel, validate_assignment=True):
             ],
         }
     )
-    face_selection_policy: FaceSelectionPolicyEnum = Field(
-        json_schema_extra={
-            "title": "face_selection_policy",
-            "description": "FaceSelectionPolicy for device",
-            "examples": [
-                f"{FaceSelectionPolicyEnum.All}",
-                f"{FaceSelectionPolicyEnum.Single}",
-            ],
-        }
-    )
     security_level: SecurityLevelEnum = Field(
         json_schema_extra={
             "title": "security_level",
@@ -113,7 +102,6 @@ class DeviceConfig(BaseModel, validate_assignment=True):
         return DeviceConfig(
             algo_flow=AlgoFlowEnum.from_rsid_py(config.algo_flow),
             camera_rotation=CameraRotationEnum.from_rsid_py(config.camera_rotation),
-            face_selection_policy=FaceSelectionPolicyEnum.from_rsid_py(config.face_selection_policy),
             security_level=SecurityLevelEnum.from_rsid_py(config.security_level),
             matcher_confidence_level=MatcherConfidenceLevelEnum.from_rsid_py(config.matcher_confidence_level),
         )

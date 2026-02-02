@@ -10,9 +10,10 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import rsid_py
 from loguru import logger
 from qdrant_client import QdrantClient, models, AsyncQdrantClient
+
+from . import rsid_py
 from qdrant_client.conversions import common_types as types
 from qdrant_client.http.models import Distance, PointStruct, VectorParams
 

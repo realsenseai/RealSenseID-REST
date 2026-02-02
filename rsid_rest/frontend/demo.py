@@ -49,7 +49,7 @@ def init(fastapi_app: FastAPI) -> None:
 
         with ui.header().classes(replace="row items-center"):
             ui.button(on_click=lambda: left_drawer.toggle(), icon="menu").props("flat color=white")
-            ui.label("Intel® RealSense™ ID Simple Web Demo").classes("absolute-center")
+            ui.label("RealSense™ ID Simple Web Demo").classes("absolute-center")
 
         with ui.left_drawer(bordered=True).props("width=225").classes("bg-blue-100") as left_drawer:
             ui.label("API Documentation").classes("font-medium")
@@ -78,7 +78,7 @@ def init(fastapi_app: FastAPI) -> None:
             with ui.row().style("gap:2em").classes("justify-center w-full"):
                 with ui.column():
                     with ui.card().tight():
-                        preview_image = ui.interactive_image(f"{base_url}/v1/preview/stream/").classes("w-96 min-w-fit")
+                        preview_image = ui.interactive_image(f"{base_url}/v1/preview/stream/").classes("w-96 min-w-fit").style("height:90vh")
                         with ui.card_section():
                             user_label = ui.label("RealSenseID Ready").classes("mx-auto")
 

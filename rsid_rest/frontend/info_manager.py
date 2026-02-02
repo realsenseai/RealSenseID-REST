@@ -16,6 +16,8 @@ class InfoManager:
 
     def __init__(self, base_url: str) -> None:
         self.base_url = base_url
+        self.firmware_version = None
+        self.serial_number = None
         self.http_client: httpx.AsyncClient = httpx.AsyncClient()
 
     async def load_info(self) -> None:
