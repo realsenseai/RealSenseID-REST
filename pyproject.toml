@@ -41,7 +41,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.group.test.dependencies]
-pytest = "^8.4.0"
+pytest = "^8.4.2"
 pytest-mock = "*"
 pytest-asyncio = "^1.0.0"
 flake8 = { version = '*'}
